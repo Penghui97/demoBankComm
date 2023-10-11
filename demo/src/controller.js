@@ -3,6 +3,7 @@ import axios from 'axios'
 export default {
 
     getSignList(value) {
+        console.log("")
         const res = [];
         let j = 0
         // console.log("value",value)
