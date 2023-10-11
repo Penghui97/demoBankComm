@@ -20,13 +20,13 @@ export default {
     },
 
     async requestList(month) {
-        // let request
-        let request = "/api/oldSign/info/10000:2023-08"
-        // if(month > 8){
-        //     request= "/api/oldSign/info/10000:2023-" + (month + 1)
-        // }else{
-        //     request = "/api/oldSign/info/10000:2023-" + (month + 1)
-        // }
+        let request
+        // let request = "/api/oldSign/info/10000:2023-08"
+        if(Number(month) > 8){
+            request= "/api/oldSign/info/10000:2023-" + month
+        }else{
+            request = "/api/oldSign/info/10000:2023-" + month
+        }
         console.log("request get",request)
         let ans = []
         return new Promise((resolve,reject)=>{

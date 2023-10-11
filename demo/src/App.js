@@ -1,6 +1,5 @@
 import { Calendar, Button, Space, Badge } from 'antd';
 import { Component } from 'react';
-import axios from 'axios'
 import moment from 'moment'
 import Controller from './controller'
 
@@ -17,11 +16,13 @@ class App extends Component {
   }
 
 
-  onPanelChange = (value, mode) => {
+  onPanelChange = async (value, mode) => {
     console.log(value.format('YYYY-MM-DD'), mode);
     let time = value.format('YYYY-MM-DD')
     let monthChange = time.split('-')[1]
-    let newList = Controller.requestList(monthChange)
+    console.log("monthChange",monthChange)
+    let newList = await Controller.requestList(monthChange)
+    console.log("updated data",newList)
     this.setState({
       currentMonth: monthChange,
       unsignList: newList
