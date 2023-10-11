@@ -60,6 +60,34 @@ export default {
                 console.log(error, '获取签到列表接口返回报错')
             })
 
-    }
+    },
 
+    oldSupplementary(date, month) {
+        let data
+        if(month>9){
+            if(date>9){
+                data = '10000:2023-' + month + '-' + date
+            }else{
+                data = '10000:2023-' + month + '-0' + date
+            }
+        }else{
+            if(date>9){
+                data = '10000:2023-0' + month + '-' + date
+            }else{
+                data = '10000:2023-0' + month + '-0' + date
+            }
+        }
+        console.log("request body of put",data)
+        axios.put('/api/oldSign/supplementary', data, {
+            headers: {
+                'Content-Type': 'application/text;charset=UTF-8'
+            }
+        })
+            .then(res => {
+                console.log(res, '!!!!!!!!!!old sign in return data')
+            })
+            .catch(error => {
+                console.log(error, '获取签到列表接口返回报错')
+            })
+    }
 }
