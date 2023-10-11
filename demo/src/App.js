@@ -12,7 +12,8 @@ class App extends Component {
         unsignList: [],
         currentList: [],
         currentMonth: new Date().getMonth() + 1,
-        date: 0
+        date: 0,
+        newsignList: []
     }
 
 
@@ -21,12 +22,14 @@ class App extends Component {
         let time = value.format('YYYY-MM-DD')
         let monthChange = time.split('-')[1]
         console.log("monthChange", monthChange)
-        let newList = await Controller.requestList(Number(monthChange)-1)
+        let newList = await Controller.requestList(monthChange)
+        let newsignList = await Controller.requestNewList(monthChange)
+        console.log('newsignList--------------------------------',newsignList);
         console.log("updated data", newList)
-        let list = Controller.getSignList(newList)
         this.setState({
             currentMonth: monthChange,
-            unsignList: list
+            unsignList: newList,
+            newsignList: newsignList
         })
 
     };
@@ -83,11 +86,13 @@ class App extends Component {
             month = this.state.month
         })
         let list = await Controller.requestList(month)
+        let newsignList = await Controller.requestNewList(month)
         let unSign = Controller.getSignList(list)
         console.log("unsign data", unSign)
         this.setState({
             unsignList: unSign,
-            currentList: list
+            currentList: list,
+            newsignList: newsignList
         })
 
     }
