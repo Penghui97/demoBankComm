@@ -60,6 +60,7 @@ export default {
                 console.log(error, '获取签到列表接口返回报错')
             })
 
+<<<<<<< HEAD
     },
 
     oldSupplementary(date, month) {
@@ -144,5 +145,8 @@ export default {
     },
     newSupplementary(){
 
+=======
+>>>>>>> parent of c43832f (补签完成)
     }
+
 }

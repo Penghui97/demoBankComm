@@ -68,6 +68,18 @@ class App extends Component {
                 );
             }
         }
+        // if(list.length === 0&&(Number(currentMonth)===Number(new Date().getMonth())+1)){
+        //     console.log("warning!!!!!!!!")
+        //     if(Number(date)<=Number(new Date().getDate())){
+        //         return (
+        //             <ul>
+        //                 <li key='This is error  event.'>
+        //                     <Badge status='error' text='未签到！'/>
+        //                 </li>
+        //             </ul>
+        //         );
+        //     }
+        // }
     }
 
     onSelect = (date, info) => {
@@ -104,6 +116,7 @@ class App extends Component {
                 <div className="calendar">
                     <Space wrap>
                         <Button type="primary"
+<<<<<<< HEAD
                                 onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>老系统签到</Button>
                         <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>老系统补签</Button>
                         <Button type="primary">最大连续签到天数</Button>
@@ -113,6 +126,10 @@ class App extends Component {
                         <Button type="primary"
                                 onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>新系统签到</Button>
                         <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>新系统补签</Button>
+=======
+                                onClick={() => Controller.oldSignIn(this.state.date, this.state.currentMonth)}>签到</Button>
+                        <Button type="primary">补签</Button>
+>>>>>>> parent of c43832f (补签完成)
                         <Button type="primary">最大连续签到天数</Button>
                         <Button type="primary">月签到天数</Button>
                     </Space>
