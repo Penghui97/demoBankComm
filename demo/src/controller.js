@@ -91,6 +91,27 @@ export default {
             })
     },
 
+    getNewSignList(value) {
+        const res = [];
+        function strToDigitArray(value.signed) {
+            const arr = [];
+            for (let i = 0; i < str.length; i++) {
+                arr.push(Number(str[i]));
+            }
+            return arr;
+        }
+
+        let j = 0
+        // console.log("value",value)
+        for (let i = 0; i < value.length; i++) {
+            if (value[i].signed === 0) {
+                res[j] = i
+                j++
+            }
+        }
+        // console.log("res",res)
+        return res
+    },
     async requestNewList(month) {
         let request
         // let request = "/api/oldSign/info/10000:2023-08"
