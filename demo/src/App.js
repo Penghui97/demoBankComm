@@ -1,4 +1,4 @@
-import {Calendar, Button, Space, Badge, Modal,} from 'antd';
+import {Calendar, Button, Space, Badge} from 'antd';
 import {Component} from 'react';
 import moment from 'moment'
 import Controller from './controller'
@@ -43,7 +43,7 @@ class App extends Component {
         let currentMonth = value.$M + 1
         // console.log("currentmonth???",currentMonth,new Date().getDate())//显示面板当月和现实操作日期
         for (let i = 0; i < list.length; i++) {
-            if (Number(date) === Number(list[i]) && Number(currentMonth) === Number(this.state.currentMonth)) {
+            if (Number(date) - 1 === Number(list[i]) && Number(currentMonth) === Number(this.state.currentMonth)) {
                 return (
                     <ul>
                         <li key='This is error  event.'>
@@ -64,18 +64,6 @@ class App extends Component {
                 );
             }
         }
-        // if(list.length === 0&&(Number(currentMonth)===Number(new Date().getMonth())+1)){
-        //     console.log("warning!!!!!!!!")
-        //     if(Number(date)<=Number(new Date().getDate())){
-        //         return (
-        //             <ul>
-        //                 <li key='This is error  event.'>
-        //                     <Badge status='error' text='未签到！'/>
-        //                 </li>
-        //             </ul>
-        //         );
-        //     }
-        // }
     }
 
     onSelect = (date, info) => {
@@ -84,32 +72,6 @@ class App extends Component {
             date: date.$D
         })
     }
-
-    infoMaxCount = (value) => {
-        let maxCount = Controller.requestMax(value)
-        Modal.info({
-            title: '',
-            content: (
-                <div>
-                    <p>最大连续签到天数为：$(maxCount)</p>
-                </div>
-            ),
-            onOk() {},
-        });
-    };
-
-    infoCount = (value) => {
-        let Count = Controller.requestCount(value)
-        Modal.info({
-            title: '',
-            content: (
-                <div>
-                    <p>月签到天数为：$(Count)</p>
-                </div>
-            ),
-            onOk() {},
-        });
-    };
 
     async componentDidMount() {
         let month = moment().month()
@@ -129,8 +91,6 @@ class App extends Component {
 
     }
 
-
-
     render() {
         return (
 
@@ -138,14 +98,10 @@ class App extends Component {
                 <div className="calendar">
                     <Space wrap>
                         <Button type="primary"
-                                onClick={() => Controller.oldSignIn(this.state.date, this.state.currentMonth)}>签到</Button>
-                        <Button type="primary">补签</Button>
-                        <Button onClick={() => this.infoMaxCount(this.state.currentMonth)}>最大连续签到天数</Button>
-                        <Button onClick={() => this.infoCount(this.state.currentMonth)}>月签到天数</Button>
-                        {/*<Button type="primary"*/}
-                        {/*        onClick={() => Controller.requestMax(this.state.currentMonth)}>最大连续签到天数</Button>*/}
-                        {/*<Button type="primary"*/}
-                        {/*        onClick={() => Controller.requestCount(this.state.currentMonth)}>月签到天数</Button>*/}
+                                onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>签到</Button>
+                        <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>补签</Button>
+                        <Button type="primary">最大连续签到天数</Button>
+                        <Button type="primary">月签到天数</Button>
                     </Space>
                     <Calendar
                         onPanelChange={this.onPanelChange}
@@ -153,13 +109,6 @@ class App extends Component {
                         onSelect={this.onSelect}
                     />
                 </div>
-
-                <Button onClick={() => this.infoMaxCount(this.state.currentMonth)}>获取签到耗时</Button>
-                <Button onClick={() => this.infoCount(this.state.currentMonth)}>月签到次数耗时</Button>
-                <Button onClick={() => this.infoMaxCount(this.state.currentMonth)}>最大连续签到耗时</Button>
-                <Button onClick={() => this.infoCount(this.state.currentMonth)}>月签到天数</Button>
-                <Button onClick={() => this.infoMaxCount(this.state.currentMonth)}>最大连续签到天数</Button>
-
 
             </div>
 
