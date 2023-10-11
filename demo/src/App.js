@@ -43,7 +43,7 @@ class App extends Component {
         let currentMonth = value.$M + 1
         // console.log("currentmonth???",currentMonth,new Date().getDate())//显示面板当月和现实操作日期
         for (let i = 0; i < list.length; i++) {
-            if (Number(date) === Number(list[i]) && Number(currentMonth) === Number(this.state.currentMonth)) {
+            if (Number(date) - 1 === Number(list[i]) && Number(currentMonth) === Number(this.state.currentMonth)) {
                 return (
                     <ul>
                         <li key='This is error  event.'>
