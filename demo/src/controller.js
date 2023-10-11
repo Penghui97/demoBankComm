@@ -1,8 +1,5 @@
 import axios from 'axios'
 
-
-const fakeList = [1, 4, 5, 10, 11, 12, 13, 17, 19, 22, 23, 28]
-
 export default {
 
     getSignList(value) {
@@ -22,18 +19,19 @@ export default {
     async requestList(month) {
         let request
         // let request = "/api/oldSign/info/10000:2023-08"
-        if(Number(month) > 8){
-            request= "/api/oldSign/info/10000:2023-" + month
-        }else{
-            request = "/api/oldSign/info/10000:2023-" + month
+        if (Number(month) > 8) {
+            request = "/api/oldSign/info/10000:2023-" + (Number(month)+1)
+        } else {
+            request = "/api/oldSign/info/10000:2023-0" + (Number(month)+1)
         }
-        console.log("request get",request)
+        console.log("request get", request)
         let ans = []
-        return new Promise((resolve,reject)=>{
+        return new Promise((resolve, reject) => {
             axios.get(request)
                 .then(res => {
                     console.log(res.data, '!!!!!!!!!!get request data')
-                    let ans = this.getSignList(res.data)
+                    ans = res.data
+                    // let ans = this.getSignList(res.data)
                     // console.log("ans",ans)
                     resolve(ans)
                 })
@@ -45,6 +43,23 @@ export default {
 
         // console.log("!!!!unSign",unSign)
         // return ans
+    },
+
+    oldSignIn(date, month) {
+        let data = '10000:2023-' + month + '-' + date
+        console.log("request body",data)
+        axios.post('/api/oldSign/sign', data, {
+            headers: {
+                'Content-Type': 'application/text;charset=UTF-8'
+            }
+        })
+            .then(res => {
+                console.log(res, '!!!!!!!!!!old sign in return data')
+            })
+            .catch(error => {
+                console.log(error, '获取签到列表接口返回报错')
+            })
+
     }
 
 }
