@@ -14,7 +14,6 @@ class App extends Component {
     unsignList: [],
     currentMonth: new Date().getMonth() + 1,
     a: ""
-    // currentMonth: 10
   }
 
 
@@ -50,37 +49,24 @@ class App extends Component {
     if (flag) {
       console.log("赋值！！！！！")
       return (
-          <ul>
-            <li key='This is error  event.'>
-              <Badge status='error' text='未签到！' />
-            </li>
-          </ul>
+        <ul>
+          <li key='This is error  event.'>
+            <Badge status='error' text='未签到！' />
+          </li>
+        </ul>
       );
     }
   }
 
-  componentDidMount() {
-    // let month = moment().month()
-    // this.setState({
-    //   month: moment().month()
-    // }, () => {
-    //   console.log(this.state.month)
-    //   month = this.state.month
-    // })
-
-    // let request = "/api/oldSign/info/10000:2023-0" + (month + 1)
-
-    let unSign = fakeList
-    // axios.get(request)
-    //   .then(res => {
-    //     console.log(res.data, '!!!!!!!!!!')
-    //     unSign = Controller.getSignList(res.data) ? Controller.getSignList(res.data) : fakeList
-    //   })
-    //   .catch(error => {
-    //     console.log(error, '获取签到列表接口返回报错')
-    //     unSign = fakeList
-    //   })
-    console.log("!!!!!!!假数据", unSign)
+  async componentDidMount() {
+    let month = moment().month()
+    this.setState({
+      month: moment().month()
+    }, () => {
+      month = this.state.month
+    })
+    let unSign = await Controller.requestList(month)
+    console.log("unsign data", unSign)
     this.setState({
       unsignList: unSign
     })
@@ -90,27 +76,26 @@ class App extends Component {
   render() {
     return (
 
-        <div className="App">
-          <div className="calendar">
-            <Space wrap>
-              <Button type="primary" onClick={() => {
-                this.setState({
-                  // unsignList: [...this.state.unsignList, 28]
-                  a: "1"
-                }, () => {
-                  console.log(this.state.a, "a")
-                })
-              }}>签到</Button>
-              <Button type="primary">补签</Button>
-              <Button type="primary">最大连续签到天数</Button>
-            </Space>
-            <Calendar
-                onPanelChange={this.onPanelChange}
-                cellRender={this.cellRender}
-            />
-          </div>
-
+      <div className="App">
+        <div className="calendar">
+          <Space wrap>
+            <Button type="primary" onClick={() => {
+              this.setState({
+                unsignList: [...this.state.unsignList, 28]
+              }, () => {
+                console.log(this.state.a, "a")
+              })
+            }}>签到</Button>
+            <Button type="primary">补签</Button>
+            <Button type="primary">最大连续签到天数</Button>
+          </Space>
+          <Calendar
+            onPanelChange={this.onPanelChange}
+            cellRender={this.cellRender}
+          />
         </div>
+
+      </div>
 
     );
   }
