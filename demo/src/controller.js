@@ -100,16 +100,19 @@ export default {
     },
     getNewSignList(value) {
         const res = this.strToDigitArray(value);
+        console.log(res)
         let j = 0
+        const  newRes = []
         // console.log("value",value)
-        for (let i = 0; i < value.length; i++) {
-            if (value[i].signed === 0) {
-                res[j] = i
+        for (let i = 0; i < res.length; i++) {
+            if (res[i] === 0) {
+                newRes[j] = i
                 j++
             }
         }
         // console.log("res",res)
-        return res
+        console.log(newRes,newRes)
+        return newRes
     },
     async requestNewList(month) {
         let request
@@ -119,7 +122,7 @@ export default {
         } else {
             request = "/api/newSign/info/10000:2023-0" + (Number(month)+1)
         }
-        console.log("requestNewList", request)
+        console.log("requestNewList1", request)
         let ans = []
         return new Promise((resolve, reject) => {
             axios.get(request)
@@ -127,7 +130,7 @@ export default {
                     console.log(res.data, 'get new request data')
                     ans = res.data
                     // let ans = this.getSignList(res.data)
-                    console.log("ans",ans)
+                    // console.log("ans",ans)
                     // resolve(ans)
                 })
                 .catch(error => {
