@@ -1,8 +1,8 @@
-import { Calendar, Button, Space, Badge } from 'antd';
-import { Component } from 'react';
+import { Calendar, Button, Space, Badge ,Modal ,DatePicker} from 'antd';
+import {Component, useState} from 'react';
 import moment from 'moment'
 import Controller from './controller'
-
+import {logDOM} from "@testing-library/react";
 const fakeList = [1, 3, 5, 8, 11, 12, 13]
 
 
@@ -12,7 +12,9 @@ class App extends Component {
   state = {
     unsignList: [],
     currentMonth: new Date().getMonth() + 1,
-    a: ""
+    a: "",
+    isModalOpen: false,
+    selectedDate: null
   }
 
 
@@ -74,6 +76,32 @@ class App extends Component {
 
   }
 
+  showModal = () => {
+    this.setState({ isModalOpen: true });
+  }
+  handleDateSelect = (date) => {
+    this.setState({
+      selectedDate: date.format('DD')
+    });
+  }
+  handleOk = () => {
+    //获取日期选择的值
+    console.log('okok')
+    console.log(this.state.selectedDate);
+    const selectedDate = this.state.selectedDate;
+    console.log(selectedDate);
+    Controller.supplementary(selectedDate);
+    this.setState({ isModalOpen: false });
+  }
+
+  handleCancel = () => {
+    this.setState({ isModalOpen: false });
+  }
+  handleDateChange = (date) => {
+    this.setState({
+      selectedDate: date
+    })
+  }
   render() {
     return (
 
@@ -87,7 +115,20 @@ class App extends Component {
                 console.log(this.state.a, "a")
               })
             }}>签到</Button>
-            <Button type="primary">补签</Button>
+            <Button type="primary" onClick={this.showModal}>补签</Button>
+            <Modal
+                title="补签日期"
+                open={this.state.isModalOpen}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+            >
+              {/*<DatePicker onChange={this.onChange} />*/}
+              <DatePicker
+                  value={this.state.selectedDate}
+                  onChange={this.handleDateChange}
+              />
+            </Modal>
+
             <Button type="primary">最大连续签到天数</Button>
           </Space>
           <Calendar
