@@ -98,8 +98,15 @@ class App extends Component {
                 <div className="calendar">
                     <Space wrap>
                         <Button type="primary"
-                                onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>签到</Button>
-                        <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>补签</Button>
+                                onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>老系统签到</Button>
+                        <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>老系统补签</Button>
+                        <Button type="primary">最大连续签到天数</Button>
+                        <Button type="primary">月签到天数</Button>
+                    </Space>
+                    <Space wrap>
+                        <Button type="primary"
+                                onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>新系统签到</Button>
+                        <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>新系统补签</Button>
                         <Button type="primary">最大连续签到天数</Button>
                         <Button type="primary">月签到天数</Button>
                     </Space>
