@@ -91,16 +91,15 @@ export default {
             })
     },
 
-    getNewSignList(value) {
-        const res = [];
-        function strToDigitArray(value.signed) {
-            const arr = [];
-            for (let i = 0; i < str.length; i++) {
-                arr.push(Number(str[i]));
-            }
-            return arr;
+    strToDigitArray(value) {
+        const arr = [];
+        for (let i = 0; i < value.singed.length; i++) {
+            arr.push(Number(value.singed[i]));
         }
-
+        return arr;
+    },
+    getNewSignList(value) {
+        const res = this.strToDigitArray(value);
         let j = 0
         // console.log("value",value)
         for (let i = 0; i < value.length; i++) {
