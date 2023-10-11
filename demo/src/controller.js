@@ -60,7 +60,6 @@ export default {
                 console.log(error, '获取签到列表接口返回报错')
             })
 
-<<<<<<< HEAD
     },
 
     oldSupplementary(date, month) {
@@ -92,6 +91,26 @@ export default {
             })
     },
 
+    strToDigitArray(value) {
+        const arr = [];
+        for (let i = 0; i < value.singed.length; i++) {
+            arr.push(Number(value.singed[i]));
+        }
+        return arr;
+    },
+    getNewSignList(value) {
+        const res = this.strToDigitArray(value);
+        let j = 0
+        // console.log("value",value)
+        for (let i = 0; i < value.length; i++) {
+            if (value[i].signed === 0) {
+                res[j] = i
+                j++
+            }
+        }
+        // console.log("res",res)
+        return res
+    },
     async requestNewList(month) {
         let request
         // let request = "/api/oldSign/info/10000:2023-08"
@@ -145,8 +164,5 @@ export default {
     },
     newSupplementary(){
 
-=======
->>>>>>> parent of c43832f (补签完成)
     }
-
 }
