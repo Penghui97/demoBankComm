@@ -21,11 +21,12 @@ class App extends Component {
         let time = value.format('YYYY-MM-DD')
         let monthChange = time.split('-')[1]
         console.log("monthChange", monthChange)
-        let newList = await Controller.requestList(monthChange)
+        let newList = await Controller.requestList(Number(monthChange)-1)
         console.log("updated data", newList)
+        let list = Controller.getSignList(newList)
         this.setState({
             currentMonth: monthChange,
-            unsignList: newList
+            unsignList: list
         })
 
     };

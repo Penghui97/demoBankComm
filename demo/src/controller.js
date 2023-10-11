@@ -3,7 +3,6 @@ import axios from 'axios'
 export default {
 
     getSignList(value) {
-        console.log("")
         const res = [];
         let j = 0
         // console.log("value",value)
@@ -73,9 +72,9 @@ export default {
             }
         }else{
             if(date>9){
-                data = '10000:2023-0' + month + '-' + date
+                data = '10000:2023-' + month + '-' + date
             }else{
-                data = '10000:2023-0' + month + '-0' + date
+                data = '10000:2023-' + month + '-0' + date
             }
         }
         console.log("request body of put",data)
