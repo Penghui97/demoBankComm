@@ -2,6 +2,7 @@ import {Calendar, Button, Space, Badge, Modal} from 'antd';
 import {Component} from 'react';
 import moment from 'moment'
 import Controller from './controller'
+import {logDOM} from "@testing-library/react";
 
 const fakeList = [1, 3, 5, 8, 11, 12, 13]
 
@@ -23,13 +24,13 @@ class App extends Component {
         let monthChange = time.split('-')[1]
         console.log("monthChange", monthChange)
         let newList = await Controller.requestList(monthChange)
-        let newsignList = await Controller.requestNewList(monthChange)
-        console.log('newsignList--------------------------------',newsignList);
+        // let newsignList = await Controller.requestNewList(monthChange)
+        // console.log('newsignList--------------------------------',newsignList);
         console.log("updated data", newList)
         this.setState({
             currentMonth: monthChange,
-            unsignList: newList,
-            newsignList: newsignList
+            unsignList: newList
+            // newsignList: newsignList
         })
 
     };
@@ -202,6 +203,8 @@ class App extends Component {
         let list = await Controller.requestList(month)
         let newsignList = await Controller.requestNewList(month)
         let unSign = Controller.getSignList(list)
+        let tmp = Controller.getNewSignList(newsignList)
+        console.log('tmp----------------------------------------------',tmp);
         console.log("unsign data", unSign)
         this.setState({
             unsignList: unSign,
