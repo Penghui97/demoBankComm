@@ -12,7 +12,8 @@ class App extends Component {
         unsignList: [],
         currentList: [],
         currentMonth: new Date().getMonth() + 1,
-        date: 0
+        date: 0,
+        newsignList: []
     }
 
 
@@ -21,12 +22,14 @@ class App extends Component {
         let time = value.format('YYYY-MM-DD')
         let monthChange = time.split('-')[1]
         console.log("monthChange", monthChange)
-        let newList = await Controller.requestList(Number(monthChange) - 1)
+        let newList = await Controller.requestList(monthChange)
+        let newsignList = await Controller.requestNewList(monthChange)
+        console.log('newsignList--------------------------------',newsignList);
         console.log("updated data", newList)
-        let list = Controller.getSignList(newList)
         this.setState({
             currentMonth: monthChange,
-            unsignList: list
+            unsignList: newList,
+            newsignList: newsignList
         })
 
     };
@@ -67,22 +70,6 @@ class App extends Component {
         }
     }
 
-    oldRender = async () => {
-        let month = new Date().getMonth()
-        // console.log("date function return month",month)
-        let listRender = await Controller.requestList(Number(new Date().getMonth()))
-        console.log("listRender", listRender)
-        let unsigned = Controller.getSignList(listRender)
-        this.setState({
-            currentList: listRender,
-            unsignList: unsigned
-        })
-    }
-
-    newRender = async () => {
-
-    }
-
     onSelect = (date, info) => {
         console.log("onselect", date, info)
         this.setState({
@@ -99,11 +86,13 @@ class App extends Component {
             month = this.state.month
         })
         let list = await Controller.requestList(month)
+        let newsignList = await Controller.requestNewList(month)
         let unSign = Controller.getSignList(list)
         console.log("unsign data", unSign)
         this.setState({
             unsignList: unSign,
-            currentList: list
+            currentList: list,
+            newsignList: newsignList
         })
 
     }
@@ -114,20 +103,16 @@ class App extends Component {
             <div className="App">
                 <div className="calendar">
                     <Space wrap>
-                        <Button type="primary" onClick={async () => this.oldRender()}>老系统获取列表</Button>
                         <Button type="primary"
                                 onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>老系统签到</Button>
-                        <Button type="primary"
-                                onClick={() => Controller.oldSupplementary(this.state.date, this.state.currentMonth)}>老系统补签</Button>
+                        <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>老系统补签</Button>
                         <Button type="primary">最大连续签到天数</Button>
                         <Button type="primary">月签到天数</Button>
                     </Space>
                     <Space wrap>
-                        <Button type="primary" onClick={async () => this.newRender()}>新系统获取列表</Button>
                         <Button type="primary"
                                 onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>新系统签到</Button>
-                        <Button type="primary"
-                                onClick={() => Controller.oldSupplementary(this.state.date, this.state.currentMonth)}>新系统补签</Button>
+                        <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>新系统补签</Button>
                         <Button type="primary">最大连续签到天数</Button>
                         <Button type="primary">月签到天数</Button>
                     </Space>
