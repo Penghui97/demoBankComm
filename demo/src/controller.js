@@ -140,16 +140,16 @@ export default {
         const singed = res.join('');
         console.log('singed !!!!!!',singed)
         const requestData = {
-            "id": `10000: 2023-${month}`,
+            "id": `10000:2023-${month}`,
             "key": `10000:2023:${month}`,
             "day": `${date}`,
             "singed": singed
         }
-        let data = JSON.stringify(requestData);
-        console.log("request body",data)
-        axios.post('/api/newSign/sign', data, {
+        // let data = JSON.stringify(requestData);
+        console.log("request body",requestData)
+        axios.post('/api/newSign/sign', requestData, {
             headers: {
-                'Content-Type': 'application/text;charset=UTF-8'
+                'Content-Type': 'application/json;charset=UTF-8'
             }
         })
             .then(res => {
@@ -176,10 +176,10 @@ export default {
             "day": `${date}`,
             "singed": singed
         }
-        let data = JSON.stringify(requestData);
-        axios.put('/api/newSign/supplementary', data, {
+        // let data = JSON.stringify(requestData);
+        axios.put('/api/newSign/supplementary', requestData, {
             headers: {
-                'Content-Type': 'application/text;charset=UTF-8'
+                'Content-Type': 'application/json;charset=UTF-8'
             }
         })
             .then(res => {
