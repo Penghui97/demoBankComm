@@ -16,13 +16,25 @@ export default {
         return res
     },
 
+    getSignListFromArray(arr){
+        const res = []
+        let j = 0
+        for(let i = 0;i< arr.length;i++){
+            if(arr[i]===0){
+                res[j]=i
+                j++
+            }
+        }
+        return res
+    },
+
     async requestList(month) {
         let request
         // let request = "/api/oldSign/info/10000:2023-08"
         if (Number(month) > 8) {
-            request = "/api/oldSign/info/10000:2023-" + (Number(month)+1)
+            request = "/api/oldSign/info/10000:2023-" + (Number(month) + 1)
         } else {
-            request = "/api/oldSign/info/10000:2023-0" + (Number(month)+1)
+            request = "/api/oldSign/info/10000:2023-0" + (Number(month) + 1)
         }
         console.log("request get", request)
         let ans = []
@@ -47,7 +59,7 @@ export default {
 
     oldSignIn(date, month) {
         let data = '10000:2023-' + month + '-' + date
-        console.log("request body",data)
+        console.log("request body", data)
         axios.post('/api/oldSign/sign', data, {
             headers: {
                 'Content-Type': 'application/text;charset=UTF-8'
@@ -64,20 +76,20 @@ export default {
 
     oldSupplementary(date, month) {
         let data
-        if(month>9){
-            if(date>9){
+        if (month > 9) {
+            if (date > 9) {
                 data = '10000:2023-' + month + '-' + date
-            }else{
+            } else {
                 data = '10000:2023-' + month + '-0' + date
             }
-        }else{
-            if(date>9){
+        } else {
+            if (date > 9) {
                 data = '10000:2023-' + month + '-' + date
-            }else{
+            } else {
                 data = '10000:2023-' + month + '-0' + date
             }
         }
-        console.log("request body of put",data)
+        console.log("request body of put", data)
         axios.put('/api/oldSign/supplementary', data, {
             headers: {
                 'Content-Type': 'application/text;charset=UTF-8'
@@ -92,7 +104,7 @@ export default {
     },
 
     strToDigitArray(value) {
-        const arr = [];
+        let arr = [];
         for (let i = 0; i < value.singed.length; i++) {
             arr.push(Number(value.singed[i]));
         }
@@ -102,7 +114,7 @@ export default {
         const res = this.strToDigitArray(value);
         console.log(res)
         let j = 0
-        const  newRes = []
+        const newRes = []
         // console.log("value",value)
         for (let i = 0; i < res.length; i++) {
             if (res[i] === 0) {
@@ -111,16 +123,16 @@ export default {
             }
         }
         // console.log("res",res)
-        console.log(newRes,newRes)
+        console.log(newRes, newRes)
         return newRes
     },
     async requestNewList(month) {
         let request
         // let request = "/api/oldSign/info/10000:2023-08"
         if (Number(month) > 8) {
-            request = "/api/newSign/info/10000:2023-" + (Number(month)+1)
+            request = "/api/newSign/info/10000:2023-" + (Number(month) + 1)
         } else {
-            request = "/api/newSign/info/10000:2023-0" + (Number(month)+1)
+            request = "/api/newSign/info/10000:2023-0" + (Number(month) + 1)
         }
         console.log("requestNewList1", request)
         let ans = []
@@ -128,21 +140,26 @@ export default {
             axios.get(request)
                 .then(res => {
                     console.log(res.data, 'get new request data')
-                    ans = res.data
-                    // let ans = this.getSignList(res.data)
-                    // console.log("ans",ans)
-                    // resolve(ans)
+                    // console.log("!!!!!!!!sign list", typeof(res.data.signed))//字符串
+                    const date = res.data.signed.split('')
+                    // let test = this.getSignList(res.data)
+                    // console.log("test????????",date)//字符串数组
+                    for(let i =0;i<date.length;i++){
+                        ans[i]=Number(date[i])
+                    }
+                    console.log("!!!!!!changed array",ans)
+                    resolve(ans)
                 })
                 .catch(error => {
                     console.log(error, '获取签到列表接口返回报错')
-                    // resolve(ans)
+                    resolve(ans)
                 })
         })
 
         // console.log("!!!!unSign",unSign)
         // return ans
     },
-    newSignIn(date, month,value) {
+    newSignIn(date, month, value) {
         const requestData = {
             "id": `1000: 2023-${month}`,
             "key": `1000:2023:${month}`,
@@ -151,7 +168,7 @@ export default {
         }
 
         let data = '10000:2023-' + month + '-' + date
-        console.log("request body",data)
+        console.log("request body", data)
         axios.post('/api/newSign/sign', data, {
             headers: {
                 'Content-Type': 'application/text;charset=UTF-8'
@@ -165,22 +182,22 @@ export default {
             })
 
     },
-    newSupplementary(date, month,value) {
+    newSupplementary(date, month, value) {
         let data
-        if(month>9){
-            if(date>9){
+        if (month > 9) {
+            if (date > 9) {
                 data = '10000:2023-' + month + '-' + date
-            }else{
+            } else {
                 data = '10000:2023-' + month + '-0' + date
             }
-        }else{
-            if(date>9){
+        } else {
+            if (date > 9) {
                 data = '10000:2023-' + month + '-' + date
-            }else{
+            } else {
                 data = '10000:2023-' + month + '-0' + date
             }
         }
-        console.log("request body of put",data)
+        console.log("request body of put", data)
         axios.put('/api/oldSign/supplementary', data, {
             headers: {
                 'Content-Type': 'application/text;charset=UTF-8'
@@ -194,12 +211,12 @@ export default {
             })
     },
     //获取最大天数
-    async requestMax(month,type) {
+    async requestMax(month, type) {
         let request
-        if(type == 1){
+        if (type === 1) {
             request = "/api/oldSign/info/max_continue_days/10000:2023-" + Number(month)
         }
-        if(type == 2){
+        if (type === 2) {
             request = "/api/newSign/info/max_continue_days/10000:2023-" + Number(month)
         }
         console.log("request get", request)
@@ -221,12 +238,12 @@ export default {
         })
     },
 
-    async requestCount(month,type) {
+    async requestCount(month, type) {
         let request
-        if(type == 1){
+        if (type === 1) {
             request = "/api/oldSign/info/count/10000:2023-" + Number(month)
         }
-        if(type == 2){
+        if (type === 2) {
             request = "/api/newSign/info/count/10000:2023-" + Number(month)
         }
         console.log("request get", request)
@@ -249,7 +266,7 @@ export default {
     },
 
     async requestGetList() {
-        let request ="/api/costCompare/getSignList/20"
+        let request = "/api/costCompare/getSignList/20"
         console.log("request get 获取签到列表对比", request)
         let ans = []
         return new Promise((resolve, reject) => {
@@ -270,7 +287,7 @@ export default {
     },
 
     async requestGetCount() {
-        let request ="/api/costCompare/getSignedCount/20"
+        let request = "/api/costCompare/getSignedCount/20"
         console.log("request get 获取月签到次数对比", request)
         let ans = []
         return new Promise((resolve, reject) => {
@@ -291,7 +308,7 @@ export default {
     },
 
     async requestGetMax() {
-        let request ="/api/costCompare/maxContinue/20"
+        let request = "/api/costCompare/maxContinue/20"
         console.log("request get 获取最大连续签到对比", request)
         let ans = []
         return new Promise((resolve, reject) => {
@@ -312,7 +329,7 @@ export default {
     },
 
     async requestGetSign() {
-        let request ="/api/costCompare/sign/20"
+        let request = "/api/costCompare/sign/20"
         console.log("request get 实现签到对比", request)
         let ans = []
         return new Promise((resolve, reject) => {
@@ -333,7 +350,7 @@ export default {
     },
 
     async requestGetSupplementary() {
-        let request ="/api/costCompare/supplementary/20"
+        let request = "/api/costCompare/supplementary/20"
         console.log("request get 实现补签对比", request)
         let ans = []
         return new Promise((resolve, reject) => {

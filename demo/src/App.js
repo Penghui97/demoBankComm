@@ -2,6 +2,7 @@ import {Calendar, Button, Space, Badge, Modal} from 'antd';
 import {Component} from 'react';
 import moment from 'moment'
 import Controller from './controller'
+
 // import {logDOM} from "@testing-library/react";
 
 class App extends Component {
@@ -17,18 +18,29 @@ class App extends Component {
 
 
     onPanelChange = async (value, mode) => {
+        let newList
+        let unsignList
         console.log(value.format('YYYY-MM-DD'), mode);
         let time = value.format('YYYY-MM-DD')
         let monthChange = time.split('-')[1]
         console.log("monthChange", monthChange)
-        let newList = await Controller.requestList(Number(monthChange)-1)
+        if (this.state.getListFlag === 0) {
+            console.log('!!!!!!!!!!!!!!!!old system!!!!!!!!!!!!!!!!')
+            newList = await Controller.requestList(Number(monthChange) - 1)
+            unsignList = Controller.getSignList(newList)
+        } else {
+            console.log('!!!!!!!!!!!!!!!!new system!!!!!!!!!!!!!!!!')
+            newList = await Controller.requestNewList(Number(monthChange) - 1)
+            unsignList = Controller.getSignListFromArray(newList)
+        }
         // let newUnSignList = await Controller.requestNewList(monthChange)
         // console.log('newUnSignList--------------------------------',newUnSignList);
         console.log("updated data", newList)
-        let unsignList = Controller.getSignList(newList)
+        console.log("new unsigned",unsignList)
         this.setState({
             currentMonth: monthChange,
-            unsignList: unsignList
+            unsignList: unsignList,
+            currentList: newList
             // newUnSignList: newUnSignList
         })
 
@@ -202,11 +214,6 @@ class App extends Component {
         }, () => {
             month = this.state.month
         })
-        // if (this.state.getListFlag === 0) {
-        //     list = await Controller.requestList(month)
-        // }else{
-        //     list = await Controller.requestNewList(month)
-        // }
         list = await Controller.requestList(month)
         let unSign = Controller.getSignList(list)
         // let tmp = Controller.getNewSignList(newUnSignList)
