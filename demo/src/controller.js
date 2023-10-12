@@ -91,27 +91,18 @@ export default {
             })
     },
 
-    strToDigitArray(value) {
-        const arr = [];
-        for (let i = 0; i < value.singed.length; i++) {
-            arr.push(Number(value.singed[i]));
-        }
-        return arr;
-    },
-    getNewSignList(value) {
-        const res = this.strToDigitArray(value);
-        console.log(res)
-        let j = 0
+    getNewSignList(value,date) {
+        console.log('hahahahahahahah',value.signed)
+        const res = value.signed.split('');
+        console.log(date)
         const  newRes = []
-        // console.log("value",value)
-        for (let i = 0; i < res.length; i++) {
-            if (res[i] === 0) {
-                newRes[j] = i
-                j++
+        for(let i = 0; i < res.length; i++) {
+            if(i >= (date - 1)) break;
+            if(res[i] === '0') {
+                newRes.push(i);
             }
         }
-        // console.log("res",res)
-        console.log(newRes,newRes)
+        console.log('newRes',newRes)
         return newRes
     },
     async requestNewList(month) {
@@ -131,11 +122,11 @@ export default {
                     ans = res.data
                     // let ans = this.getSignList(res.data)
                     // console.log("ans",ans)
-                    // resolve(ans)
+                    resolve(ans)
                 })
                 .catch(error => {
                     console.log(error, '获取签到列表接口返回报错')
-                    // resolve(ans)
+                    resolve(ans)
                 })
         })
 
@@ -143,14 +134,18 @@ export default {
         // return ans
     },
     newSignIn(date, month,value) {
+        console.log(value);
+        const res = value.signed.split('');
+        res[date-1] = '1';
+        const singed = res.join('');
+        console.log('singed !!!!!!',singed)
         const requestData = {
-            "id": `1000: 2023-${month}`,
-            "key": `1000:2023:${month}`,
-            "day": `${data}`,
-            "singed": ""
+            "id": `10000: 2023-${month}`,
+            "key": `10000:2023:${month}`,
+            "day": `${date}`,
+            "singed": singed
         }
-
-        let data = '10000:2023-' + month + '-' + date
+        let data = JSON.stringify(requestData);
         console.log("request body",data)
         axios.post('/api/newSign/sign', data, {
             headers: {
@@ -166,28 +161,29 @@ export default {
 
     },
     newSupplementary(date, month,value) {
-        let data
         if(month>9){
-            if(date>9){
-                data = '10000:2023-' + month + '-' + date
-            }else{
-                data = '10000:2023-' + month + '-0' + date
-            }
+            month = '10000:2023-' + month
         }else{
-            if(date>9){
-                data = '10000:2023-' + month + '-' + date
-            }else{
-                data = '10000:2023-' + month + '-0' + date
-            }
+            month = '10000:2023-0' + month
         }
-        console.log("request body of put",data)
-        axios.put('/api/oldSign/supplementary', data, {
+        const res = value.signed.split('');
+        res[date-1] = '1';
+        const singed = res.join('');
+        console.log('singed !!!!!!',singed)
+        const requestData = {
+            "id": `${month}`,
+            "key": `${month}`,
+            "day": `${date}`,
+            "singed": singed
+        }
+        let data = JSON.stringify(requestData);
+        axios.put('/api/newSign/supplementary', data, {
             headers: {
                 'Content-Type': 'application/text;charset=UTF-8'
             }
         })
             .then(res => {
-                console.log(res, '!!!!!!!!!!old sign in return data')
+                console.log(res, '!!!!!!!!!!newSupplementary in return data')
             })
             .catch(error => {
                 console.log(error, '获取签到列表接口返回报错')

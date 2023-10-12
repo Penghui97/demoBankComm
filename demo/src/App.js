@@ -42,7 +42,7 @@ class App extends Component {
     };
 
     dateCellRender = (value) => {
-        console.log('------hahahahaha1111------')
+
         let list = this.state.unsignList
         let date = String(value.$d)
         date = date.split(' ')[2]
@@ -193,7 +193,7 @@ class App extends Component {
         });
     };
     async componentDidMount() {
-        console.log('-----------------22222222222-')
+
         let month = moment().month()
         this.setState({
             month: moment().month(),
@@ -201,18 +201,20 @@ class App extends Component {
         }, () => {
             month = this.state.month
         })
-        let list = await Controller.requestList(month)
-        // let newUnSignList = await Controller.requestNewList(month)
-        let unSign = Controller.getSignList(list)
-        // let tmp = Controller.getNewSignList(newUnSignList)
-        // console.log('tmp----------------------------------------------',tmp);
-        console.log("unsign data", unSign)
+        // let list = await Controller.requestList(month)
+        let newUnSignList = await Controller.requestNewList(month)
+        console.log('----in APP newUnSignList-----',newUnSignList)
+        // let unSign = Controller.getSignList(list)
+        let tmp = Controller.getNewSignList(newUnSignList,this.state.date)
+        console.log('tmp----------------------------------------------',tmp);
+        // console.log("unsign data", unSign)
         this.setState({
-            unsignList: unSign,
-            currentList: list
+            unsignList: tmp,
+            currentList: newUnSignList
             // newUnSignList: newUnSignList
         })
-
+        console.log(this.state.unsignList);
+        console.log(this.state.currentList);
     }
 
     render() {
@@ -241,8 +243,8 @@ class App extends Component {
                     <div style={{margin:'15px'}}>
                         <Space wrap>
                             <Button type="primary"
-                                    onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>新系统签到</Button>
-                            <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>新系统补签</Button>
+                                    onClick={() => Controller.newSignIn(new Date().getDate(), this.state.currentMonth,this.state.currentList)}>新系统签到</Button>
+                            <Button type="primary" onClick={()=>Controller.newSupplementary(this.state.date,this.state.currentMonth,this.state.currentList)}>新系统补签</Button>
                             <Button onClick={() => this.infoMaxCount(this.state.currentMonth,2)}>最大连续签到天数</Button>
                             <Button onClick={() => this.infoCount(this.state.currentMonth,2)}>月签到天数</Button>
                         </Space>
