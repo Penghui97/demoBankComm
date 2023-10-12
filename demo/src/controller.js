@@ -142,7 +142,7 @@ export default {
         // console.log("!!!!unSign",unSign)
         // return ans
     },
-    newSignIn(date, month) {
+    newSignIn(date, month,value) {
         const requestData = {
             "id": `1000: 2023-${month}`,
             "key": `1000:2023:${month}`,
@@ -158,14 +158,40 @@ export default {
             }
         })
             .then(res => {
-                console.log(res, '!!!!!!!!!!old sign in return data')
+                console.log(res, '!!!!!!!!!!new sign in return data')
             })
             .catch(error => {
                 console.log(error, '获取签到列表接口返回报错')
             })
 
     },
-    newSupplementary(){
+    newSupplementary(date, month,value) {
+        let data
+        if(month>9){
+            if(date>9){
+                data = '10000:2023-' + month + '-' + date
+            }else{
+                data = '10000:2023-' + month + '-0' + date
+            }
+        }else{
+            if(date>9){
+                data = '10000:2023-' + month + '-' + date
+            }else{
+                data = '10000:2023-' + month + '-0' + date
+            }
+        }
+        console.log("request body of put",data)
+        axios.put('/api/oldSign/supplementary', data, {
+            headers: {
+                'Content-Type': 'application/text;charset=UTF-8'
+            }
+        })
+            .then(res => {
+                console.log(res, '!!!!!!!!!!old sign in return data')
+            })
+            .catch(error => {
+                console.log(error, '获取签到列表接口返回报错')
+            })
     },
     //获取最大天数
     async requestMax(month,type) {
