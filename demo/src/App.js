@@ -1,4 +1,4 @@
-import {Calendar, Button, Space, Badge, Modal} from 'antd';
+import {Calendar, Button, Space, Badge,Modal} from 'antd';
 import {Component} from 'react';
 import moment from 'moment'
 import Controller from './controller'
@@ -14,7 +14,7 @@ class App extends Component {
         currentList: [],
         currentMonth: new Date().getMonth() + 1,
         date: 0,
-        newsignList: []
+        newUnSignList: []
     }
 
 
@@ -24,13 +24,13 @@ class App extends Component {
         let monthChange = time.split('-')[1]
         console.log("monthChange", monthChange)
         let newList = await Controller.requestList(monthChange)
-        // let newsignList = await Controller.requestNewList(monthChange)
-        // console.log('newsignList--------------------------------',newsignList);
+        // let newUnSignList = await Controller.requestNewList(monthChange)
+        // console.log('newUnSignList--------------------------------',newUnSignList);
         console.log("updated data", newList)
         this.setState({
             currentMonth: monthChange,
             unsignList: newList
-            // newsignList: newsignList
+            // newUnSignList: newUnSignList
         })
 
     };
@@ -42,6 +42,7 @@ class App extends Component {
     };
 
     dateCellRender = (value) => {
+        console.log('------hahahahaha1111------')
         let list = this.state.unsignList
         let date = String(value.$d)
         date = date.split(' ')[2]
@@ -191,8 +192,8 @@ class App extends Component {
             },
         });
     };
-
     async componentDidMount() {
+        console.log('-----------------22222222222-')
         let month = moment().month()
         this.setState({
             month: moment().month(),
@@ -201,15 +202,15 @@ class App extends Component {
             month = this.state.month
         })
         let list = await Controller.requestList(month)
-        let newsignList = await Controller.requestNewList(month)
+        // let newUnSignList = await Controller.requestNewList(month)
         let unSign = Controller.getSignList(list)
-        let tmp = Controller.getNewSignList(newsignList)
-        console.log('tmp----------------------------------------------',tmp);
+        // let tmp = Controller.getNewSignList(newUnSignList)
+        // console.log('tmp----------------------------------------------',tmp);
         console.log("unsign data", unSign)
         this.setState({
             unsignList: unSign,
-            currentList: list,
-            newsignList: newsignList
+            currentList: list
+            // newUnSignList: newUnSignList
         })
 
     }
