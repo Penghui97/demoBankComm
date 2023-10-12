@@ -1,11 +1,8 @@
-import {Calendar, Button, Space, Badge,Modal} from 'antd';
+import {Calendar, Button, Space, Badge, Modal} from 'antd';
 import {Component} from 'react';
 import moment from 'moment'
 import Controller from './controller'
-import {logDOM} from "@testing-library/react";
-
-const fakeList = [1, 3, 5, 8, 11, 12, 13]
-
+// import {logDOM} from "@testing-library/react";
 
 class App extends Component {
 
@@ -14,7 +11,8 @@ class App extends Component {
         currentList: [],
         currentMonth: new Date().getMonth() + 1,
         date: 0,
-        newUnSignList: []
+        newUnSignList: [],
+        getListFlag: 0//查询列表信息所使用的请求，0代表通过老系统费请求渲染页面，1代表新系统渲染页面，默认为0，点击新老系统获取列表时改变状态
     }
 
 
@@ -23,13 +21,14 @@ class App extends Component {
         let time = value.format('YYYY-MM-DD')
         let monthChange = time.split('-')[1]
         console.log("monthChange", monthChange)
-        let newList = await Controller.requestList(monthChange)
+        let newList = await Controller.requestList(Number(monthChange)-1)
         // let newUnSignList = await Controller.requestNewList(monthChange)
         // console.log('newUnSignList--------------------------------',newUnSignList);
         console.log("updated data", newList)
+        let unsignList = Controller.getSignList(newList)
         this.setState({
             currentMonth: monthChange,
-            unsignList: newList
+            unsignList: unsignList
             // newUnSignList: newUnSignList
         })
 
@@ -192,8 +191,10 @@ class App extends Component {
             },
         });
     };
+
     async componentDidMount() {
         console.log('-----------------22222222222-')
+        let list
         let month = moment().month()
         this.setState({
             month: moment().month(),
@@ -201,8 +202,12 @@ class App extends Component {
         }, () => {
             month = this.state.month
         })
-        let list = await Controller.requestList(month)
-        // let newUnSignList = await Controller.requestNewList(month)
+        // if (this.state.getListFlag === 0) {
+        //     list = await Controller.requestList(month)
+        // }else{
+        //     list = await Controller.requestNewList(month)
+        // }
+        list = await Controller.requestList(month)
         let unSign = Controller.getSignList(list)
         // let tmp = Controller.getNewSignList(newUnSignList)
         // console.log('tmp----------------------------------------------',tmp);
@@ -212,7 +217,6 @@ class App extends Component {
             currentList: list
             // newUnSignList: newUnSignList
         })
-
     }
 
     render() {
@@ -220,7 +224,7 @@ class App extends Component {
 
             <div className="App">
                 <div className="calendar">
-                    <div style={{margin:'15px'}}>
+                    <div style={{margin: '15px'}}>
                         <Space wrap>
                             <Button onClick={() => this.infoGetList()}>获取签到耗时</Button>
                             <Button onClick={() => this.infoGetCount()}>月签到次数耗时</Button>
@@ -229,22 +233,38 @@ class App extends Component {
                             <Button onClick={() => this.infoGetSupplementary()}>补签耗时</Button>
                         </Space>
                     </div>
-                    <div style={{margin:'15px'}}>
+                    <div style={{margin: '15px'}}>
                         <Space wrap>
+                            <Button type="primary"
+                                    onClick={() => {
+                                        this.setState({
+                                            getListFlag: 0
+                                        })
+                                    }}>老系统获取签到列表</Button>
                             <Button type="primary"
                                     onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>老系统签到</Button>
-                            <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>老系统补签</Button>
-                            <Button onClick={() => this.infoMaxCount(this.state.currentMonth,1)}>最大连续签到天数</Button>
-                            <Button onClick={() => this.infoCount(this.state.currentMonth,1)}>月签到天数</Button>
+                            <Button type="primary"
+                                    onClick={() => Controller.oldSupplementary(this.state.date, this.state.currentMonth)}>老系统补签</Button>
+                            <Button
+                                onClick={() => this.infoMaxCount(this.state.currentMonth, 1)}>最大连续签到天数</Button>
+                            <Button onClick={() => this.infoCount(this.state.currentMonth, 1)}>月签到天数</Button>
                         </Space>
                     </div>
-                    <div style={{margin:'15px'}}>
+                    <div style={{margin: '15px'}}>
                         <Space wrap>
                             <Button type="primary"
+                                    onClick={() => {
+                                        this.setState({
+                                            getListFlag: 1
+                                        })
+                                    }}>新系统获取签到列表</Button>
+                            <Button type="primary"
                                     onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>新系统签到</Button>
-                            <Button type="primary" onClick={()=>Controller.oldSupplementary(this.state.date,this.state.currentMonth)}>新系统补签</Button>
-                            <Button onClick={() => this.infoMaxCount(this.state.currentMonth,2)}>最大连续签到天数</Button>
-                            <Button onClick={() => this.infoCount(this.state.currentMonth,2)}>月签到天数</Button>
+                            <Button type="primary"
+                                    onClick={() => Controller.oldSupplementary(this.state.date, this.state.currentMonth)}>新系统补签</Button>
+                            <Button
+                                onClick={() => this.infoMaxCount(this.state.currentMonth, 2)}>最大连续签到天数</Button>
+                            <Button onClick={() => this.infoCount(this.state.currentMonth, 2)}>月签到天数</Button>
                         </Space>
                     </div>
                     <Calendar
