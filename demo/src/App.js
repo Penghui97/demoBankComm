@@ -201,20 +201,20 @@ class App extends Component {
         }, () => {
             month = this.state.month
         })
-        // let list = await Controller.requestList(month)
-        let newUnSignList = await Controller.requestNewList(month)
-        console.log('----in APP newUnSignList-----',newUnSignList)
-        // let unSign = Controller.getSignList(list)
-        let tmp = Controller.getNewSignList(newUnSignList,this.state.date)
-        console.log('tmp----------------------------------------------',tmp);
-        // console.log("unsign data", unSign)
+        let list = await Controller.requestList(month)
+        // let newUnSignList = await Controller.requestNewList(month)
+        console.log('----in APP newUnSignList-----',list)
+        let unSign = Controller.getSignList(list)
+        // let tmp = Controller.getNewSignList(newUnSignList,this.state.date)
+        // console.log('tmp----------------------------------------------',tmp);
+        console.log("unsign data", unSign)
         this.setState({
-            unsignList: tmp,
-            currentList: newUnSignList
+            unsignList: unSign,
+            currentList: list
             // newUnSignList: newUnSignList
         })
-        console.log(this.state.unsignList);
-        console.log(this.state.currentList);
+        console.log(this.state.unsignList)
+        console.log(this.state.currentList)
     }
 
     render() {
