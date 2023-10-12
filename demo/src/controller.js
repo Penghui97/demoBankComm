@@ -91,6 +91,104 @@ export default {
             })
     },
 
+    getNewSignList(value,date) {
+        console.log('hahahahahahahah',value.signed)
+        const res = value.signed.split('');
+        console.log(date)
+        const  newRes = []
+        for(let i = 0; i < res.length; i++) {
+            if(i >= (date - 1)) break;
+            if(res[i] === '0') {
+                newRes.push(i);
+            }
+        }
+        console.log('newRes',newRes)
+        return newRes
+    },
+    async requestNewList(month) {
+        let request
+        // let request = "/api/oldSign/info/10000:2023-08"
+        if (Number(month) > 8) {
+            request = "/api/newSign/info/10000:2023-" + (Number(month)+1)
+        } else {
+            request = "/api/newSign/info/10000:2023-0" + (Number(month)+1)
+        }
+        console.log("requestNewList1", request)
+        let ans = []
+        return new Promise((resolve, reject) => {
+            axios.get(request)
+                .then(res => {
+                    console.log(res.data, 'get new request data')
+                    ans = res.data
+                    // let ans = this.getSignList(res.data)
+                    // console.log("ans",ans)
+                    resolve(ans)
+                })
+                .catch(error => {
+                    console.log(error, '获取签到列表接口返回报错')
+                    resolve(ans)
+                })
+        })
+
+        // console.log("!!!!unSign",unSign)
+        // return ans
+    },
+    newSignIn(date, month,value) {
+        console.log(value);
+        const res = value.signed.split('');
+        res[date-1] = '1';
+        const singed = res.join('');
+        console.log('singed !!!!!!',singed)
+        const requestData = {
+            "id": `10000: 2023-${month}`,
+            "key": `10000:2023:${month}`,
+            "day": `${date}`,
+            "singed": singed
+        }
+        let data = JSON.stringify(requestData);
+        console.log("request body",data)
+        axios.post('/api/newSign/sign', data, {
+            headers: {
+                'Content-Type': 'application/text;charset=UTF-8'
+            }
+        })
+            .then(res => {
+                console.log(res, '!!!!!!!!!!new sign in return data')
+            })
+            .catch(error => {
+                console.log(error, '获取签到列表接口返回报错')
+            })
+
+    },
+    newSupplementary(date, month,value) {
+        if(month>9){
+            month = '10000:2023-' + month
+        }else{
+            month = '10000:2023-0' + month
+        }
+        const res = value.signed.split('');
+        res[date-1] = '1';
+        const singed = res.join('');
+        console.log('singed !!!!!!',singed)
+        const requestData = {
+            "id": `${month}`,
+            "key": `${month}`,
+            "day": `${date}`,
+            "singed": singed
+        }
+        let data = JSON.stringify(requestData);
+        axios.put('/api/newSign/supplementary', data, {
+            headers: {
+                'Content-Type': 'application/text;charset=UTF-8'
+            }
+        })
+            .then(res => {
+                console.log(res, '!!!!!!!!!!newSupplementary in return data')
+            })
+            .catch(error => {
+                console.log(error, '获取签到列表接口返回报错')
+            })
+    },
     //获取最大天数
     async requestMax(month,type) {
         let request
