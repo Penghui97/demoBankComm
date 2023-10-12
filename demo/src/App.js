@@ -36,7 +36,7 @@ class App extends Component {
         // let newUnSignList = await Controller.requestNewList(monthChange)
         // console.log('newUnSignList--------------------------------',newUnSignList);
         console.log("updated data", newList)
-        console.log("new unsigned",unsignList)
+        console.log("new unsigned", unsignList)
         this.setState({
             currentMonth: monthChange,
             unsignList: unsignList,
@@ -211,8 +211,6 @@ class App extends Component {
         this.setState({
             month: moment().month(),
             date: moment().date()
-        }, () => {
-            month = this.state.month
         })
         list = await Controller.requestList(month)
         let unSign = Controller.getSignList(list)
@@ -266,9 +264,9 @@ class App extends Component {
                                         })
                                     }}>新系统获取签到列表</Button>
                             <Button type="primary"
-                                    onClick={() => Controller.oldSignIn(new Date().getDate(), this.state.currentMonth)}>新系统签到</Button>
+                                    onClick={() => Controller.newSignIn(new Date().getDate(), new Date().getMonth() +1, this.state.currentList)}>新系统签到</Button>
                             <Button type="primary"
-                                    onClick={() => Controller.oldSupplementary(this.state.date, this.state.currentMonth)}>新系统补签</Button>
+                                    onClick={() => Controller.newSupplementary(this.state.date, this.state.currentMonth, this.state.currentList)}>新系统补签</Button>
                             <Button
                                 onClick={() => this.infoMaxCount(this.state.currentMonth, 2)}>最大连续签到天数</Button>
                             <Button onClick={() => this.infoCount(this.state.currentMonth, 2)}>月签到天数</Button>

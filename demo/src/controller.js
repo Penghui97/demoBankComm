@@ -16,12 +16,12 @@ export default {
         return res
     },
 
-    getSignListFromArray(arr){
+    getSignListFromArray(arr) {
         const res = []
         let j = 0
-        for(let i = 0;i< arr.length;i++){
-            if(arr[i]===0){
-                res[j]=i
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] === 0) {
+                res[j] = i
                 j++
             }
         }
@@ -144,10 +144,10 @@ export default {
                     const date = res.data.signed.split('')
                     // let test = this.getSignList(res.data)
                     // console.log("test????????",date)//字符串数组
-                    for(let i =0;i<date.length;i++){
-                        ans[i]=Number(date[i])
+                    for (let i = 0; i < date.length; i++) {
+                        ans[i] = Number(date[i])
                     }
-                    console.log("!!!!!!changed array",ans)
+                    console.log("!!!!!!changed array", ans)
                     resolve(ans)
                 })
                 .catch(error => {
@@ -160,51 +160,67 @@ export default {
         // return ans
     },
     newSignIn(date, month, value) {
+        console.log(value);
+        // const res = value.signed.split('');
+        value[date - 1] = '1';
+        const signed = value.join('');
+        console.log('singed !!!!!!', signed)
         const requestData = {
-            "id": `1000: 2023-${month}`,
-            "key": `1000:2023:${month}`,
-            "day": `${data}`,
-            "singed": ""
+            "id": `10000:2023-${month}`,
+            "key": `10000:2023:${month}`,
+            "day": `${date}`,
+            "singed": signed
         }
+        // let data = JSON.stringify(requestData);
+        console.log("request body", requestData)
+        // axios.post('/api/newSign/sign', JSON.stringify(requestData) )
+        //     .then(res => {
+        //         console.log(res, '!!!!!!!!!!new sign in return data')
+        //     })
+        //     .catch(error => {
+        //         console.log(error, '获取签到列表接口返回报错')
+        //     })
+        // // {
+        // //     headers: {
+        // //         'Content-Type': 'application/json;charset=UTF-8'
+        // //     }
+        // // }
 
-        let data = '10000:2023-' + month + '-' + date
-        console.log("request body", data)
-        axios.post('/api/newSign/sign', data, {
+        fetch('/newSign/sign', {
+            method: "post",
             headers: {
-                'Content-Type': 'application/text;charset=UTF-8'
-            }
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        }).then(res => res.json()).then(data => {
+            console.log("请求的结果？？？？？？？？？",data) //请求的结果
         })
-            .then(res => {
-                console.log(res, '!!!!!!!!!!new sign in return data')
-            })
-            .catch(error => {
-                console.log(error, '获取签到列表接口返回报错')
-            })
 
     },
     newSupplementary(date, month, value) {
-        let data
         if (month > 9) {
-            if (date > 9) {
-                data = '10000:2023-' + month + '-' + date
-            } else {
-                data = '10000:2023-' + month + '-0' + date
-            }
+            month = '10000:2023-' + month
         } else {
-            if (date > 9) {
-                data = '10000:2023-' + month + '-' + date
-            } else {
-                data = '10000:2023-' + month + '-0' + date
-            }
+            month = '10000:2023-0' + month
         }
-        console.log("request body of put", data)
-        axios.put('/api/oldSign/supplementary', data, {
+        const res = value.signed.split('');
+        res[date - 1] = '1';
+        const singed = res.join('');
+        console.log('singed !!!!!!', singed)
+        const requestData = {
+            "id": `${month}`,
+            "key": `${month}`,
+            "day": `${date}`,
+            "singed": singed
+        }
+        // let data = JSON.stringify(requestData);
+        axios.put('/api/newSign/supplementary', requestData, {
             headers: {
-                'Content-Type': 'application/text;charset=UTF-8'
+                'Content-Type': 'application/json;charset=UTF-8'
             }
         })
             .then(res => {
-                console.log(res, '!!!!!!!!!!old sign in return data')
+                console.log(res, '!!!!!!!!!!newSupplementary in return data')
             })
             .catch(error => {
                 console.log(error, '获取签到列表接口返回报错')
