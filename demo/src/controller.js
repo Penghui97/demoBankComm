@@ -169,7 +169,7 @@ export default {
             "id": `10000:2023-${month}`,
             "key": `10000:2023:${month}`,
             "day": `${date}`,
-            "singed": signed
+            "signed": signed
         }
         // let data = JSON.stringify(requestData);
         console.log("request body", requestData)
@@ -186,18 +186,19 @@ export default {
         // //     }
         // // }
 
-        fetch('/newSign/sign', {
+        fetch('/api/newSign/sign', {
             method: "post",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(requestData)
         }).then(res => res.json()).then(data => {
-            console.log("请求的结果？？？？？？？？？",data) //请求的结果
+            console.log("请求的结果？？？？？？？？？", data) //请求的结果
         })
 
     },
     newSupplementary(date, month, value) {
+        console.log("????????", date, month)
         if (month > 9) {
             month = '10000:2023-' + month
         } else {
@@ -211,7 +212,7 @@ export default {
             "id": `${month}`,
             "key": `${month}`,
             "day": `${date}`,
-            "singed": singed
+            "signed": singed
         }
         // let data = JSON.stringify(requestData);
         axios.put('/api/newSign/supplementary', requestData, {
