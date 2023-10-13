@@ -199,20 +199,19 @@ export default {
     },
     newSupplementary(date, month, value) {
         console.log("????????", date, month)
-        if (month > 9) {
-            month = '10000:2023-' + month
-        } else {
-            month = '10000:2023-0' + month
-        }
-        const res = value.signed.split('');
-        res[date - 1] = '1';
-        const singed = res.join('');
-        console.log('singed !!!!!!', singed)
+        // if (month > 9) {
+        //     month = '10000:2023-' + month
+        // } else {
+        //     month = '10000:2023-0' + month
+        // }
+        value[date - 1] = '1';
+        const signed = value.join('');
+        console.log('singed !!!!!!', signed)
         const requestData = {
-            "id": `${month}`,
-            "key": `${month}`,
+            "id": `10000:2023-${month}`,
+            "key": `10000:2023:${month}`,
             "day": `${date}`,
-            "signed": singed
+            "signed": signed
         }
         // let data = JSON.stringify(requestData);
         axios.put('/api/newSign/supplementary', requestData, {
