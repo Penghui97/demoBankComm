@@ -19,6 +19,7 @@ class App extends Component {
 
     onPanelChange = async (value, mode) => {
         let newList
+        let list = []
         let unsignList
         console.log(value.format('YYYY-MM-DD'), mode);
         let time = value.format('YYYY-MM-DD')
@@ -31,11 +32,18 @@ class App extends Component {
         } else {
             console.log('!!!!!!!!!!!!!!!!new system!!!!!!!!!!!!!!!!')
             newList = await Controller.requestNewList(Number(monthChange) - 1)
-            unsignList = Controller.getSignListFromArray(newList)
+            list = newList
+            if (Number(monthChange) === new Date().getMonth() + 1) {
+                list = []
+                for (let i = 0; i < new Date().getDate(); i++) {
+                    list[i] = newList[i]
+                }
+            }
+            unsignList = Controller.getSignListFromArray(list)
         }
         // let newUnSignList = await Controller.requestNewList(monthChange)
         // console.log('newUnSignList--------------------------------',newUnSignList);
-        console.log("updated data", newList)
+        console.log("updated data", list)
         console.log("new unsigned", unsignList)
         this.setState({
             currentMonth: monthChange,
@@ -264,7 +272,7 @@ class App extends Component {
                                         })
                                     }}>新系统获取签到列表</Button>
                             <Button type="primary"
-                                    onClick={() => Controller.newSignIn(new Date().getDate(), new Date().getMonth() +1, this.state.currentList)}>新系统签到</Button>
+                                    onClick={() => Controller.newSignIn(new Date().getDate(), new Date().getMonth() + 1, this.state.currentList)}>新系统签到</Button>
                             <Button type="primary"
                                     onClick={() => Controller.newSupplementary(this.state.date, this.state.currentMonth, this.state.currentList)}>新系统补签</Button>
                             <Button
