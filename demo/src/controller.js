@@ -230,10 +230,16 @@ export default {
     async requestMax(month, type) {
         let request
         if (type === 1) {
-            request = "/api/oldSign/info/max_continue_days/10000:2023-" + Number(month)
+            if (Number(month) < 10)
+                request = "/api/oldSign/info/max_continue_days/10000:2023-0" + Number(month)
+            else
+                request = "/api/oldSign/info/max_continue_days/10000:2023-" + Number(month)
         }
         if (type === 2) {
-            request = "/api/newSign/info/max_continue_days/10000:2023-" + Number(month)
+            if(Number(month) < 10)
+                request = "/api/newSign/info/max_continue_days/10000:2023-0" + Number(month)
+            else
+                request = "/api/newSign/info/max_continue_days/10000:2023-" + Number(month)
         }
         console.log("request get", request)
         let ans = []
@@ -257,10 +263,16 @@ export default {
     async requestCount(month, type) {
         let request
         if (type === 1) {
-            request = "/api/oldSign/info/count/10000:2023-" + Number(month)
+            if (Number(month) < 10)
+                request = "/api/oldSign/info/count/10000:2023-0" + Number(month)
+            else
+                request = "/api/oldSign/info/count/10000:2023-" + Number(month)
         }
         if (type === 2) {
-            request = "/api/newSign/info/count/10000:2023-" + Number(month)
+            if (Number(month) < 10)
+                request = "/api/newSign/info/count/10000:2023-0" + Number(month)
+            else
+                request = "/api/newSign/info/count/10000:2023-" + Number(month)
         }
         console.log("request get", request)
         let ans = []
